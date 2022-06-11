@@ -6,6 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Gamification API')
     .setDescription('API of the amazing gamification web')
     .setVersion('1.0')

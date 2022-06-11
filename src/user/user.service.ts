@@ -46,8 +46,9 @@ export class UserService {
     if (!user) {
       return null;
     }
-
-    const equalPassword = bcrypt.compare(password, user.password);
+    console.log('email: ', email);
+    console.log('password: ', user.password);
+    const equalPassword = await bcrypt.compare(password, user.password);
 
     if (!equalPassword) {
       return null;

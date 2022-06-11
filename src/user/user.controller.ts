@@ -13,17 +13,24 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
 import { RegisterUserDto } from 'src/auth/dto/register.dto';
 import { JWTTokenObject } from 'src/auth/interfaces/jwt.dto';
+import { PusherService } from 'src/pusher.service';
 import { UserService } from './user.service';
 
 @ApiTags('User Management')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly pusherService: PusherService,
+  ) {}
 
   @Post('register')
   async register(@Body() body: RegisterUserDto) {
     try {
       const user = await this.userService.register(body);
+      this.pusherService.trigger('badge', 'triggerBadge', {
+        message: 'Register Success!',
+      });
       return user;
     } catch (err) {
       if (err.message.includes('Duplicate')) {
